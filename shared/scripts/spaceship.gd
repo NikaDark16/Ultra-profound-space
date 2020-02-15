@@ -12,23 +12,12 @@ func _physics_process(delta):
 	else:
 		apply_movement(axis * ACCELERATION * delta)
 	motion = move_and_slide(motion)
-	
-	print(rad2deg(rotation))
-	if (rotation >= -180 and rotation <= -179.98):
-		print("fuck")
+	rotation = position.angle_to_point(get_global_mouse_position())
 
 func get_input_axis():
 	var axis = Vector2.ZERO
 	axis.x = int(Input.is_action_pressed("ui_right")) - int(Input.is_action_pressed("ui_left"))
 	axis.y = int(Input.is_action_pressed("ui_down")) - int(Input.is_action_pressed("ui_up"))
-
-	if axis != Vector2.ZERO and rotation != Vector2.ZERO.angle_to_point(axis.normalized()):
-		print(rad2deg(rotation), " ", rad2deg(Vector2.ZERO.angle_to_point(axis.normalized())))
-		$Tween.interpolate_property(self, "rotation", rotation, Vector2.ZERO.angle_to_point(axis.normalized()), 0.5, Tween.TRANS_LINEAR, Tween.EASE_IN)
-		if not $Tween.is_active():
-			#rotation = Vector2.ZERO.angle_to_point(axis.normalized()) + 3*PI/2
-			$Tween.start()
-
 	return axis.normalized()
 
 func apply_friction(amount):
